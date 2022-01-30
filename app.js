@@ -1,10 +1,12 @@
 //global selections and variables
-const colorDivs = document.querySelectorAll(".color");
+const baseColorDiv = document.querySelector(".colors");
+let colorDivs = document.querySelectorAll(".color");
 const generateBTn = document.querySelector(".generate");
 const sliders = document.querySelectorAll(`input[type = "range"]`);
 const colorHexes = document.querySelectorAll(".color h2");
 let initialColors;
 let savedPalettes;
+let tempInitialColors
 const adjustmentBtns =document.querySelectorAll(".adjust");
 const copyContainer  = document.querySelector(".copy-container");
 const closeBtns = document.querySelectorAll(".close-adjustment");
@@ -116,7 +118,7 @@ function generateHex(){//generate and return a random hexCode
         div.style.backgroundColor = randomGeneratedColor;
         divText.innerHTML = randomGeneratedColor;
    
-        // console.log("lo bha"+divText.inne);
+
         
        checkTextContrast(randomGeneratedColor, divText);
        for(icon of icons){
@@ -424,5 +426,139 @@ function getLocal(){
     } 
 }
 
+
+////////////////////////////MY CODE///////////////////////////////
+
+
+
+
+function addNewColorDiv(){
+//creating Div using javaSript
+const colorDiv = document.createElement("div");
+colorDiv.classList.add("color");
+const hexText = document.createElement("h2");
+hexText.innerText = "hex";
+colorDiv.appendChild(hexText);
+const controlsDiv = document.createElement("div");
+controlsDiv.classList.add("controls");
+colorDiv.appendChild(controlsDiv);
+const adjustButton = document.createElement("button");
+adjustButton.classList.add("adjust");
+const adjustITag = document.createElement("i");
+adjustITag.classList.add("fas");
+adjustITag.classList.add("fa-slider-h");
+adjustButton.appendChild(adjustITag);
+
+const lockButton = document.createElement("button");
+lockButton.classList.add("lock");
+const lockITag = document.createElement("i");
+lockITag.classList.add("fas");
+lockITag.classList.add("fa-lock-open");
+lockButton.appendChild(lockITag);
+controlsDiv.appendChild(adjustButton);
+controlsDiv.appendChild(lockButton);
+
+const sliderDiv = document.createElement("div");
+sliderDiv.classList.add("sliders");
+const closeSlidersButton =  document.createElement("button");
+closeSlidersButton.classList.add("close-adjustment");
+closeSlidersButton.innerText = "X";
+sliderDiv.appendChild(closeSlidersButton);
+
+//hueSlider
+const hueSpan = document.createElement("span");
+hueSpan.innerText = "Hue";
+const hueSlider = document.createElement("input");
+hueSlider.type = "slider";
+hueSlider.min =0;
+hueSlider.max = 360;
+hueSlider.step = 1;
+hueSlider.name = "hue";
+hueSlider.classList.add("hue-input");
+hueSlider.setAttribute("data-hue",colorDivs.length);
+
+
+sliderDiv.appendChild(hueSpan);
+sliderDiv.appendChild(hueSlider);
+//brightnessSlider
+const brightSpan = document.createElement("span");
+brightSpan.innerText = "Brightness";
+const brightSlider = document.createElement("input");
+brightSlider.type = "slider";
+brightSlider.inputMode= "slider";
+brightSlider.min =0;
+brightSlider.max = 1;
+brightSlider.step = 0.01;
+brightSlider.name = "brightness";
+brightSlider.classList.add("brightness-input");
+brightSlider.setAttribute("data-brightness",colorDivs.length);
+
+sliderDiv.appendChild(brightSpan);
+sliderDiv.appendChild(brightSlider);
+//saturationSlider
+const satSpan = document.createElement("span");
+satSpan.innerText = "Saturation";
+const satSlider = document.createElement("input");
+satSlider.type = "slider";
+satSlider.min =0;
+satSlider.max = 1;
+satSlider.step = 0.01;
+satSlider.name = "saturation";
+satSlider.classList.add("sat-input");
+satSlider.setAttribute("data-sat",colorDivs.length);
+
+sliderDiv.appendChild(satSpan);
+sliderDiv.appendChild(satSlider);
+
+colorDiv.appendChild(sliderDiv);
+
+baseColorDiv.appendChild(colorDiv);
+
+colorDivs = document.querySelectorAll(".color");
+//all the color divs including the new one are selected
+tempInitialColors = [...initialColors];
+//tempInitialColors is empty and then set to initial Colors that includes the new div as well.
+randomColors();     
+console.log(initialColors);
+tempInitialColors.push(initialColors[colorDivs.length-1]);
+
+initialColors = tempInitialColors;
+// tempInitialColors.push(initialColors[initialColors.length]);
+// console.log(initialColors);
+// initialColors=[];
+console.log(tempInitialColors);
+console.log(initialColors);
+
+
+
+
+    colorDivs.forEach((div, index)=>{
+        div.style.backgroundColor =initialColors[index];        const text = div.children[0];
+        updateTextUI(index);
+        checkTextContrast(initialColors[index], text);
+        const sliders  = div.querySelectorAll(".sliders input");
+        const hue = sliders[0];
+        const bright = sliders[1];
+        const sat = sliders[2];
+        const color = chroma(initialColors[index]);
+        colorizeSliders(color, hue, bright, sat)
+       resetSliders(hue, bright, sat);
+
+})
+
+//  console.log("after adding div:"+tempInitialColors.length);
+tempInitialColors=[];
+
+
+}
+
+const addNewColorBtn = document.querySelector(".addNewColor");
+    console.log(addNewColorBtn);
+addNewColorBtn.addEventListener("click",function(e){
+    addNewColorDiv();
+    // console.log(initialColors);
+})
+
+
 getLocal();
-randomColors();
+randomColors(); 

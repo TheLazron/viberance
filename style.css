@@ -267,3 +267,17 @@ input[type="range"] {
 .close-library {
   border-top-right-radius: 0;
 }
+
+.addNewColor {
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  background-color: white;
+  color: rgb(40, 40, 53);
+  font-size: 3rem;
+  right: 0;
+  top: 50%;
+  border-radius: 100%;
+  border: none;
+  cursor: pointer;
+}
